@@ -37,8 +37,8 @@ public class MainApp {
 		Archiver archiever = new Archiver(securedFile.getPath(), archeive.getPath());
         //running timer task as daemon thread
         Timer timer = new Timer();
-        timer.scheduleAtFixedRate(fp, 0, 120000);
-        timer.scheduleAtFixedRate(archiever, 0, 180000);
+        timer.scheduleAtFixedRate(fp, 0, 60000); // 1 min
+        timer.scheduleAtFixedRate(archiever, 0, 120000); // 2 min
         System.out.println("TimerTask started");
 
 	}

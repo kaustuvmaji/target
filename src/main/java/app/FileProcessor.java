@@ -19,8 +19,7 @@ import java.util.TimerTask;
  */
 public final class FileProcessor extends TimerTask {
 
-	private final File sourceLocation;
-	private final File targetLocation;
+	private final File sourceLocation, targetLocation;
 
 	FileProcessor(String source, String target) {
 		this.sourceLocation = new File(source);
