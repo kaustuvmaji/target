@@ -64,6 +64,7 @@ public class Archiver extends TimerTask {
 			try {
 
 				long currentTimeMillis = System.currentTimeMillis();
+				/*File zipFile = new File(zipFilePath.getPath() + "/" + currentTimeMillis + ".zip");*/
 				Path p = Files.createFile(Paths.get(zipFilePath.getPath() + "/" + currentTimeMillis + ".zip"));
 				try (ZipOutputStream zipOutputStream = new ZipOutputStream(Files.newOutputStream(p))) {
 					Path source = Paths.get(sourceDirPath.getPath());

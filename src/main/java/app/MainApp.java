@@ -33,6 +33,7 @@ public class MainApp {
 		// if the directory does not exist, create it
 		folderCreate(securedFile);
 		File archeive = new File("c://archive/");
+		folderCreate(archeive);
 		FileProcessor fp = new FileProcessor("c://tmp/", securedFile.getPath());
 		Archiver archiever = new Archiver(securedFile.getPath(), archeive.getPath());
         //running timer task as daemon thread
