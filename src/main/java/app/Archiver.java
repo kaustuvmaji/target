@@ -3,6 +3,7 @@ package app;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
@@ -11,8 +12,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 /**
- * Archiver 
- * check folder size if exceed 150 mb then archive
+ * Archiver check folder size if exceed 150 mb then archive
+ * 
  * @author kaustuv
  *
  */
@@ -31,7 +32,11 @@ public class Archiver extends TimerTask {
 		long getfoldersizeinmb = getfoldersizeinmb(sourceDirPath);
 		System.out.println(getfoldersizeinmb);
 		if (getfoldersizeinmb > 150) {
-			pack();
+			try {
+				pack();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		System.out.println(getClass() + " ended at " + new Date());
 	}
@@ -56,15 +61,13 @@ public class Archiver extends TimerTask {
 		return (getFolderSize(folder) / 1024) / 1024;
 	}
 
-	private void pack() {
+	private void pack() throws IOException {
 		Path lock = Paths.get(sourceDirPath.getPath() + "/" + "zlock");
-
-		if (!Files.exists(lock)) {
-			File zlock = lock.toFile();
+		if (!Files.exists(lock, LinkOption.NOFOLLOW_LINKS)) {
+			File zlock = Files.createFile(lock).toFile();
 			try {
 
 				long currentTimeMillis = System.currentTimeMillis();
-				/*File zipFile = new File(zipFilePath.getPath() + "/" + currentTimeMillis + ".zip");*/
 				Path p = Files.createFile(Paths.get(zipFilePath.getPath() + "/" + currentTimeMillis + ".zip"));
 				try (ZipOutputStream zipOutputStream = new ZipOutputStream(Files.newOutputStream(p))) {
 					Path source = Paths.get(sourceDirPath.getPath());
@@ -84,7 +87,7 @@ public class Archiver extends TimerTask {
 			}
 			// delete folder content
 			for (File file : sourceDirPath.listFiles()) {
-				if (!file.isDirectory()) {
+				if (!file.isDirectory() && !file.getName().contains("zlock")) {
 					System.out.println("Archived " + file.getPath());
 					file.delete();
 				}
